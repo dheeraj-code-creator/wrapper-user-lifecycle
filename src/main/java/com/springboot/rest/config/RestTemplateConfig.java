@@ -23,19 +23,19 @@ public class RestTemplateConfig {
 	    return new ModelMapper();
 	}
 	
-// for local environment	
+	// for local environment
 	@Bean
 	@Profile("local")
-	public RestTemplate localRestTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
-	
-// for higher environments	
-	@Profile("!local")
-	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+	public RestTemplate restTemplateLocal(RestTemplateBuilder builder) {
 		RestTemplate restTemplate = builder.build();
 		return restTemplate;
 	}
-	 
+
+	// for higher environments
+	@Profile("!local")
+	@Bean
+	public RestTemplate restTemplateNotLocal(RestTemplateBuilder builder) {
+		RestTemplate restTemplate = builder.build();
+		return restTemplate;
+	}	 
 }
