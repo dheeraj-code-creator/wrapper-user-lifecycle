@@ -36,4 +36,28 @@ public class UserDetailsService {
 		return (List<UserDto>) apiClient.getOperation(getUri, Object.class);
 	}
 
+	public void updateUser(UserDto userdto, String userId) {
+		URI putUri = 	UriComponentsBuilder.fromPath(userManagementPath)
+                                            .pathSegment("userinfo/update/")
+                                            .build()
+                                            .toUri();
+		apiClient.putOperation(putUri,userdto,userId,Object.class);
+	}
+
+	public UserDto getUserByUserId(String userId) {
+		URI getUriById = 	UriComponentsBuilder.fromPath(userManagementPath)
+                                            .pathSegment("userinfo/")
+                                            .build()
+                                            .toUri();	
+        return (UserDto) apiClient.getOperationByUserId(getUriById, userId, Object.class);
+	}
+
+	public void deleteById(String userId) {
+		URI deleteUri = 	UriComponentsBuilder.fromPath(userManagementPath)
+                                            .pathSegment("userinfo/delete/")
+                                            .build()
+                                            .toUri();
+        apiClient.deleteOperation(deleteUri, userId);
+		
+	}
 }
