@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.springboot.rest.dto.UserDto;
+
 public class RestTemplateUserClient implements ApiClient {
 	
 	@Value("${user.management.baseUrl}")
@@ -34,8 +36,36 @@ public class RestTemplateUserClient implements ApiClient {
         return restTemplate.getForObject(builder, rClasss);
 	}
 
-	public void putOperation(URI uri, Object requestObject) {
-		
+	@Override
+	public void putOperation(URI putUri, Object requestObject, String userId, Class<Object> class1) {
+		URI builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
+                                          .path(putUri.getPath())
+                                          .query(putUri.getQuery())
+                                          .build()
+                                          .toUri();
+		String builderResult = builder + userId;
+		restTemplate.put(builderResult, requestObject);
 	}
 
+	@Override
+	public <R> R getOperationByUserId(URI getUriById, String userId, Class<R> rClass) {
+		URI builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
+                                          .path(getUriById.getPath())
+                                          .query(getUriById.getQuery())
+                                          .build()
+                                          .toUri();
+        String builderResult = builder + userId;
+        return (R) restTemplate.getForObject(builderResult, UserDto.class);
+	}
+
+	@Override
+	public void deleteOperation(URI deleteUri, String userId) {
+		URI builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
+                                          .path(deleteUri.getPath())
+                                          .query(deleteUri.getQuery())
+                                          .build()
+                                          .toUri();
+        String builderResult = builder + userId;
+        restTemplate.delete(builderResult);
+	}
 }
